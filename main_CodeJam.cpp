@@ -121,7 +121,7 @@ public:
 		if(bSign!=y.bSign || l!=y.l)
 			return 0;
 		int i;
-		for(i=l-1;i>=0&&d[i]==y.d[i];i--);
+		for(i=l-1;i>=0&&d[i]==y[i];i--);
 		return i<0;
 	}
 	//addition
@@ -132,15 +132,19 @@ public:
 		{
 			int i;
 			LL h;
-			for(h=0,i=0; i<x.l||i<y.l||h;h+=(i<x.l)*x.d[i]+(i<y.l)*y.d[i],x.d[i]=h%B,h/=B,i++);
+			for(h=0,i=0; i<x.l||i<y.l||h;h+=(i<x.l)*x[i]+(i<y.l)*y[i],x[i]=h%B,h/=B,i++);
 			x.l = i;
+			return x;
 		}
-		return x;
+		else
+		{
+			return *this;
+		}
 	}
 	//subtraction
-	bint operator-(const bint& x)
+	bint operator-(const bint& y)
 	{
-		return *this;
+		return (*this)+(-y);
 	}
 	
 	// bint operator*(const bint& x)
@@ -174,7 +178,10 @@ static int dy[] = {-1,0,1,-1,1,-1,0,1};
 #define FILENAME "sample"
 
 void solve(){
-	
+	string s1, s2;
+	cin>>s1>>s2;
+	bint i(s1), j(s2);
+	cout<<boolalpha<<i<<" "<<j<<" "<<(i<j)<<" "<<(i==j)<<" "<<(i+j)<<" "<<(i-j)<<endl;
 }
 
 int main()
@@ -189,7 +196,7 @@ int main()
 	cin>>case_num;
 	while(case_num-->0){
 		cout<<"Case #"<<no++<<": "<<endl;
-		
+		solve();
 	}
 	
 #ifdef BG
