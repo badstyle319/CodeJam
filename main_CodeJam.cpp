@@ -46,7 +46,7 @@ public:
 	
 	bint(string s): bSign(false)
 	{
-		int i, j, val;
+		int i, j, n;
 
 		//erase leading 0
 		s.erase(0, min(s.find_first_not_of('0'), s.size()-1));
@@ -57,16 +57,10 @@ public:
 			bSign = true;
 		}
 		
-		reverse(s.begin(), s.end());
-		for(l=0,i=0; i<s.length(); i+=LB)
-		{
-			string s1=s.substr(i, LB);
-			reverse(s1.begin(), s1.end());
-			val = 0;
-			for(j=0; j<s1.length(); j++)
-				val = val*10+s1[j]-'0';
-			d[l++] = val;
-		}
+		n = s.length();
+		for(l=(n+LB-1)/LB, i=0; i<l; i++)
+			for(d[i]=0, j=0; j<LB; j++)
+				if(n-i*LB-LB+j>=0) d[i]=d[i]*10+s[n-i*LB-LB+j]-'0';
 	}
 	
 	bint(const char* s)
@@ -116,7 +110,7 @@ public:
 				return l<y.l;
 			int i;
 			for(i=l-1;i>=0&&d[i]==y[i];i--);
-			return (i>=0 && d[i]<y[i]) ^ bSign;
+			return (i>=0 && (bSign?y[i]<d[i]:d[i]<y[i]));
 		}else{
 			return bSign;
 		}
@@ -194,15 +188,9 @@ int main()
 	
 	cin>>case_num;
 	while(case_num-->0){
-		
-		
-		
-		
-		
 		cout<<"Case #"<<no++<<": "<<endl;
 		
 	}
-	
 	
 #ifdef BG
 	fclose(stdin);
