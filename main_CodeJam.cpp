@@ -25,15 +25,21 @@ class bint
 	static const int LB = (int)log10(B);
 	
 	int d[DLM/LB], l;
-	bool bSign;
+	bool bNeg;
+	bint _abs(const bint& y)
+	{
+		if(y.bNeg)
+			return -y;
+		return y;
+	}
 public:
 	int operator [](int i) const { return d[i]; }
 	int &operator [](int i) { return d[i]; }
-	bint(long long x): bSign(false)
+	bint(long long x): bNeg(false)
 	{
 		if(x<0)
 		{
-			bSign = true;
+			bNeg = true;
 			x = ~x+1;
 		}
 		for(l=1,d[l-1]=x%B,x/=B;x;d[l++]=x%B,x/=B);
@@ -44,7 +50,7 @@ public:
 		*this = bint((long long)x);
 	}
 	
-	bint(string s): bSign(false)
+	bint(string s): bNeg(false)
 	{
 		int i, j, n;
 
@@ -54,10 +60,10 @@ public:
 		if((i=s.find_first_of('-'))!=string::npos)
 		{
 			s.erase(i, 1);
-			bSign = true;
+			bNeg = true;
 		}
-		
 		n = s.length();
+		
 		for(l=(n+LB-1)/LB, i=0; i<l; i++)
 			for(d[i]=0, j=0; j<LB; j++)
 				if(n-i*LB-LB+j>=0) d[i]=d[i]*10+s[n-i*LB-LB+j]-'0';
@@ -72,7 +78,7 @@ public:
 	bint operator-() const
 	{
 		bint x(*this);
-		x.bSign = !this->bSign;
+		x.bNeg = !this->bNeg;
 		return x;
 	}
 	//prefix ++
@@ -104,21 +110,21 @@ public:
 	//less than
 	bool operator<(const bint& y)
 	{
-		if(bSign==y.bSign)
+		if(bNeg==y.bNeg)
 		{
 			if(l!=y.l)
 				return l<y.l;
 			int i;
 			for(i=l-1;i>=0&&d[i]==y[i];i--);
-			return (i>=0 && (bSign?y[i]<d[i]:d[i]<y[i]));
+			return (i>=0 && (bNeg?y[i]<d[i]:d[i]<y[i]));
 		}else{
-			return bSign;
+			return bNeg;
 		}
 	}
 	//equal with
 	bool operator==(const bint& y)
 	{
-		if(bSign!=y.bSign || l!=y.l)
+		if(bNeg!=y.bNeg || l!=y.l)
 			return 0;
 		int i;
 		for(i=l-1;i>=0&&d[i]==y[i];i--);
@@ -128,7 +134,7 @@ public:
 	bint operator+(const bint& y)
 	{
 		bint x(*this);
-		if(x.bSign==y.bSign)
+		if(x.bNeg==y.bNeg)
 		{
 			int i;
 			LL h;
@@ -136,10 +142,17 @@ public:
 			x.l = i;
 			return x;
 		}
-		else
+		else if(_abs(y)<_abs(x))
 		{
-			return *this;
-		}
+			int i;
+			LL h;
+			for(h=0, i=0; i<x.l; h+=x[i]-(i<y.l)*y[i]+B, x[i]=h%B, h/=B, h--, i++);
+			for(; x.l>1 && !x[x.l-1]; x.l--);
+			return x;
+		}else if(_abs(x)<_abs(y))
+			return bint(y) + (*this);
+		else
+			return 0;
 	}
 	//subtraction
 	bint operator-(const bint& y)
@@ -147,27 +160,44 @@ public:
 		return (*this)+(-y);
 	}
 	
-	// bint operator*(const bint& x)
-	// {
-		// return *this;
-	// }
+	bint operator*(const int& y)
+	{
+		bint x(*this);
+		int i;
+		LL h;
+		for(h=0, i=0; i<x.l || h; h+=(i<x.l)*(long long)x[i]*y, x[i]=h%B, h/=B, i++);
+		for(x.l=i; x.l>1 && !x[x.l-1]; x.l--);
+		return x;
+	}
 	
-	// bint operator*(const bint& x)
-	// {
-		// return *this;
-	// }
+	bint operator/(const int& y)
+	{
+		bint x(*this);
+		int i;
+		long long h;
+		for(h=0, i=x.l-1; i>=0; h=h*B+x[i], x[i]=h/y, h%=y, i--);
+		for(; x.l>1 && !x[x.l-1]; x.l--);
+		return x;
+	}
 	
-	// bint operator%(const bint& x)
-	// {
-		// return *this;
-	// }
+	bint operator%(const int& y)
+	{
+		bint x(*this);
+		int i;
+		long long h;
+		for(h=0, i=x.l-1; i>=0; h=h*B+x[i], h%=y, i--);
+		return h;
+	}
 	
 	friend ostream& operator<<(ostream& stream, bint x)
 	{
-		if(x.bSign)
+		if(x.bNeg)
 			stream<<'-';
 		for(int i=x.l-1;i>=0;i--)
-			stream<<x.d[i];
+			if(i==x.l-1)
+				stream << x[i];
+			else
+				stream<<setfill('0')<<setw(LB)<<x.d[i];
 		return stream;
 	}
 };
@@ -177,11 +207,9 @@ static int dy[] = {-1,0,1,-1,1,-1,0,1};
 
 #define FILENAME "sample"
 
-void solve(){
-	string s1, s2;
-	cin>>s1>>s2;
-	bint i(s1), j(s2);
-	cout<<boolalpha<<i<<" "<<j<<" "<<(i<j)<<" "<<(i==j)<<" "<<(i+j)<<" "<<(i-j)<<endl;
+void solve()
+{
+	
 }
 
 int main()
@@ -192,7 +220,6 @@ int main()
 #endif
 	
 	int case_num, no=1;
-	
 	cin>>case_num;
 	while(case_num-->0){
 		cout<<"Case #"<<no++<<": "<<endl;
