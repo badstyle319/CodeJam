@@ -25,7 +25,7 @@ static int dy[] = {-1,0,1,-1,1,-1,0,1};
 
 void solve()
 {
-	
+	cout<<endl;
 }
 
 int main()
@@ -38,7 +38,7 @@ int main()
 	int case_num, no=1;
 	cin>>case_num;
 	while(case_num-->0){
-		cout<<"Case #"<<no++<<": "<<endl;
+		cout<<"Case #"<<no++<<": ";
 		solve();
 	}
 	
