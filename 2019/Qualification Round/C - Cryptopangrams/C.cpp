@@ -24,7 +24,8 @@ class bint
 	static const int DLM = 100; //digital length max
 	static const int B = 100000; //base
 	static const int LB = (int)log10(B);
-	
+	static const int DIGIT_SIZE = DLM*2/LB; //bint*bint
+    
 	bool bNeg;
 	bint _abs(const bint& y)
 	{
@@ -33,7 +34,7 @@ class bint
 		return y;
 	}
 public:
-	int d[DLM/LB], l;
+	int d[DIGIT_SIZE], l;
 	int operator [](int i) const { return d[i]; }
 	int &operator [](int i) { return d[i]; }
 	bint(): bNeg(false)
