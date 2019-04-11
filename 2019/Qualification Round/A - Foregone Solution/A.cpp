@@ -4,7 +4,6 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <unordered_map>
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -15,6 +14,7 @@
 
 #define LL long long
 #define ULL unsigned long long
+#define PI 3.14159265
 
 using namespace std;
 
@@ -23,17 +23,38 @@ static int dy[] = {-1,0,1,-1,1,-1,0,1};
 
 #define FILENAME "sample"
 
-unsigned char solve(int num){
-	int temp;
-	do{
-		temp = num % 10;
-		if(temp == 4)
-			return 1;
-	}while(num/=10);
-	return 0;
+void solve()
+{
+	int idx;
+	string s;
+	cin>>s;
+	idx = s.length()-1;
+#ifdef BG
+	cout<<"("<<s<<") ";
+#endif
+	for(int i=0; i<s.length(); i++)
+	{
+		if(s[i]=='4')
+		{
+			idx = min(i, idx);
+			cout<<'1';
+		}
+		else
+			cout<<s[i];
+	}
+	cout<<' ';
+	for(int i=0; i<s.length();i++)
+	{
+		if(s[i]=='4')
+			cout<<'3';
+		else
+		{
+			if(i>=idx)
+				cout<<'0';
+		}
+	}
+	cout<<endl;
 }
-
-unordered_map<int,unsigned char> mpContains4;
 
 int main()
 {
@@ -42,30 +63,11 @@ int main()
 	freopen(FILENAME ".out", "w", stdout);
 #endif
 	
-	int case_num, no = 1, test_num, temp;
-	
+	int case_num, no=1;
 	cin>>case_num;
 	while(case_num-->0){
-		cin>>test_num;
-#ifdef BG
-	cout<<test_num<<": ";
-#endif
-		int num1 = 0, num2 = 0, k = 1;
-		do{
-			temp = test_num % 10;
-			if(temp==4)
-			{
-				num1 += k;
-				num2 += 3 * k;
-			}else{
-				num1 += temp * k;
-			}
-			k*=10;
-		}while(test_num/=10);
-#ifdef BG
-	cout<<num1<<"+"<<num2<<"="<<num1+num2<<endl;
-#endif
-		cout<<"Case #"<<no++<<": "<<num1<<" "<<num2<<endl;
+		cout<<"Case #"<<no++<<": ";
+		solve();
 	}
 	
 #ifdef BG
