@@ -11,6 +11,7 @@
 #include <sstream>
 #include <bitset>
 #include <ctime>
+#include <cassert>
 
 #define LL long long
 #define ULL unsigned long long
@@ -38,8 +39,9 @@ public:
 	bint(): bNeg(false)
 	{
 		memset(d, 0, sizeof(d));
+		l = 1;
 	}
-	bint(long long x): bNeg(false)
+	bint(LL x): bNeg(false)
 	{
 		if(x<0)
 		{
@@ -51,7 +53,7 @@ public:
 	
 	bint(int x)
 	{
-		*this = bint((long long)x);
+		*this = bint((LL)x);
 	}
 	
 	bint(string s): bNeg(false)
@@ -169,7 +171,7 @@ public:
 		bint x(*this);
 		int i;
 		LL h;
-		for(h=0, i=0; i<x.l || h; h+=(i<x.l)*(long long)x[i]*y, x[i]=h%B, h/=B, i++);
+		for(h=0, i=0; i<x.l || h; h+=(i<x.l)*(LL)x[i]*y, x[i]=h%B, h/=B, i++);
 		for(x.l=i; x.l>1 && !x[x.l-1]; x.l--);
 		return x;
 	}
@@ -178,7 +180,7 @@ public:
 	{
 		bint x(*this);
 		int i;
-		long long h;
+		LL h;
 		for(h=0, i=x.l-1; i>=0; h=h*B+x[i], x[i]=h/y, h%=y, i--);
 		for(; x.l>1 && !x[x.l-1]; x.l--);
 		return x;
@@ -188,7 +190,7 @@ public:
 	{
 		bint x(*this);
 		int i;
-		long long h;
+		LL h;
 		for(h=0, i=x.l-1; i>=0; h=h*B+x[i], h%=y, i--);
 		return h;
 	}
