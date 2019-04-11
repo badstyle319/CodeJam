@@ -25,7 +25,6 @@ class bint
 	static const int B = 100000; //base
 	static const int LB = (int)log10(B);
 	
-	int d[DLM/LB], l;
 	bool bNeg;
 	bint _abs(const bint& y)
 	{
@@ -34,6 +33,7 @@ class bint
 		return y;
 	}
 public:
+	int d[DLM/LB], l;
 	int operator [](int i) const { return d[i]; }
 	int &operator [](int i) { return d[i]; }
 	bint(): bNeg(false)
@@ -79,7 +79,6 @@ public:
 	{
 		*this = bint(string(s));
 	}
-	
 	//unary -
 	bint operator-() const
 	{
@@ -114,7 +113,7 @@ public:
 		return x;
 	}
 	//less than
-	bool operator<(const bint& y)
+	bool operator<(const bint& y) const
 	{
 		if(bNeg==y.bNeg)
 		{
@@ -135,6 +134,11 @@ public:
 		int i;
 		for(i=l-1;i>=0&&d[i]==y[i];i--);
 		return i<0;
+	}
+	//not equal with
+	bool operator!=(const bint& y)
+	{
+		return !(*this==y);
 	}
 	//addition
 	bint operator+(const bint& y)
@@ -165,8 +169,8 @@ public:
 	{
 		return (*this)+(-y);
 	}
-	
-	bint operator*(const int& y)
+	//multiplication for int
+	bint operator*(int y)
 	{
 		bint x(*this);
 		int i;
@@ -175,8 +179,20 @@ public:
 		for(x.l=i; x.l>1 && !x[x.l-1]; x.l--);
 		return x;
 	}
-	
-	bint operator/(const int& y)
+	//multiplication for bint
+	bint operator*(const bint& y)
+	{
+		bint x(*this);
+		int i, j;
+		LL h;
+		bint z;
+		for(h=0, z.l=x.l+y.l, i=0; i<z.l; z[i]=h%B, h/=B, i++)
+			for(j=i<x.l-1?i:x.l-1; j>=0 && i-j<y.l; h+=(LL)x[j]*y[i-j], j--);
+		for(; z.l>1 && !z[z.l-1]; z.l--);
+		return z;
+	}
+	//division for int
+	bint operator/(int y)
 	{
 		bint x(*this);
 		int i;
@@ -185,7 +201,20 @@ public:
 		for(; x.l>1 && !x[x.l-1]; x.l--);
 		return x;
 	}
-	
+	//division for bint
+	bint operator/(bint y)
+	{
+		bint x(*this);
+		int i;
+		bint h, t;
+		if(y.l==1) 
+			return x/y[0];
+		for(h=0, i=x.l-1; i>=0; h=h-y*x[i], i--)
+			for(t=x[i], h=h*B+t, x[i]=((h.l>y.l)*((LL)h[h.l-1]*B*B+(LL)h[h.l-2]*B+h[h.l-3])+(h.l==y.l)*((LL)h[h.l-1]*B+h[h.l-2]))/((LL)y[y.l-1]*B+y[y.l-2]); x[i] && h<y*x[i]; x[i]--);
+		for(; x.l>1 && !x[x.l-1]; x.l--);
+		return x;
+	}
+	//modulo for int
 	bint operator%(const int& y)
 	{
 		bint x(*this);
@@ -193,6 +222,20 @@ public:
 		LL h;
 		for(h=0, i=x.l-1; i>=0; h=h*B+x[i], h%=y, i--);
 		return h;
+	}
+	//modulo for bint
+	bint operator%(const bint& y)
+	{
+		bint x(*this);
+		if(x<y)
+			return x;
+		else if(x==y)
+			return 0;
+		
+		if(y.l==1) 
+			return x%y[0];
+		
+		return x-x/y*y;
 	}
 	
 	friend ostream& operator<<(ostream& stream, bint x)
