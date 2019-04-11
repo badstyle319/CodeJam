@@ -35,6 +35,10 @@ class bint
 public:
 	int operator [](int i) const { return d[i]; }
 	int &operator [](int i) { return d[i]; }
+	bint(): bNeg(false)
+	{
+		memset(d, 0, sizeof(d));
+	}
 	bint(long long x): bNeg(false)
 	{
 		if(x<0)
@@ -199,6 +203,14 @@ public:
 			else
 				stream<<setfill('0')<<setw(LB)<<x.d[i];
 		return stream;
+	}
+	
+	friend istream& operator>>(istream& in, bint& x)
+	{
+		string temp;
+		in>>temp;
+		x = bint(temp);
+		return in;
 	}
 };
 
