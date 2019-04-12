@@ -17,5 +17,5 @@ def solve(s):
 T = int(input())
 for caseNo in range(1, 1+T):
 	str=input()
-	print("Case #{}: ".format(caseNo), end='')
+	print("Case #%d: "%caseNo, end='')
 	solve(str)
