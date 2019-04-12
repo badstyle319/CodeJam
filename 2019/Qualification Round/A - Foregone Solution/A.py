@@ -1,14 +1,14 @@
 def solve(s):
 	idx = len(s)
-	for i in range(len(s)):
-		if s[i]=='4':
+	for i,ch in enumerate(s):
+		if ch=='4':
 			idx = min(idx, i)
 			print('1', end='')
 		else:
-			print(s[i], end='')
+			print(ch, end='')
 	print(' ', end='')
-	for i in range(len(s)):
-		if s[i]=='4':
+	for i,ch in enumerate(s):
+		if ch=='4':
 			print('3', end='')
 		elif i>idx:
 			print('0', end='')
