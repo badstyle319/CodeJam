@@ -1,16 +1,5 @@
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <string>
-#include <vector>
-#include <map>
-#include <algorithm>
-#include <cmath>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <bitset>
-#include <ctime>
+#include <bits/stdc++.h>
+#define _ io_base::sync_with_stdio(0);cin.tie(0);
 
 #define LL long long
 #define ULL unsigned long long
@@ -21,8 +10,6 @@ using namespace std;
 static int dx[] = {-1,-1,-1,0,0,1,1,1};
 static int dy[] = {-1,0,1,-1,1,-1,0,1};
 
-#define FILENAME "sample"
-
 void solve()
 {
 	cout<<endl;
@@ -30,22 +17,12 @@ void solve()
 
 int main()
 {
-#ifdef BG
-	freopen(FILENAME ".in", "r", stdin);
-	freopen(FILENAME ".out", "w", stdout);
-#endif
-	
 	int case_num, no=1;
 	cin>>case_num;
 	while(case_num-->0){
 		cout<<"Case #"<<no++<<": ";
 		solve();
 	}
-	
-#ifdef BG
-	fclose(stdin);
-	fclose(stdout);
-#endif
 
 	return 0;
 }
