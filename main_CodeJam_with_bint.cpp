@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#define _ io_base::sync_with_stdio(0);cin.tie(0);
 
 #define LL long long
 #define ULL unsigned long long
@@ -259,6 +258,9 @@ void solve()
 
 int main()
 {
+	io_base::sync_with_stdio(0);
+	cin.tie(0);
+	
 	int case_num, no=1;
 	cin>>case_num;
 	while(case_num-->0){
