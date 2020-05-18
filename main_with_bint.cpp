@@ -1,12 +1,5 @@
 #include <bits/stdc++.h>
 
-#define LL long long
-#define ULL unsigned long long
-#define VI vector<int>
-#define VS vector<string>
-
-#define PI 3.14159265
-
 using namespace std;
 
 class bint
@@ -251,17 +244,6 @@ public:
 	}
 };
 
-template<typename T>
-void PV(vector<T> &v)
-{
-    for(auto it:v)
-        cout<<it<<" ";
-    cout<<endl;
-};
-
-// static int dx[] = {-1,-1,-1,0,0,1,1,1};
-// static int dy[] = {-1,0,1,-1,1,-1,0,1};
-
 void solve()
 {
 	cout<<endl;
@@ -271,13 +253,28 @@ int main()
 {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
+#ifdef DBG
+	freopen("in.txt", "r", stdin);
+	freopen("out.txt", "w", stdout);
+	// clock_t begin = clock();
+#endif
+    
+	int T, case_no = 1;
 	
-	int case_num, no=1;
-	cin>>case_num;
-	while(case_num-->0){
-		cout<<"Case #"<<no++<<": ";
+    cin >> T;
+	while(T--)
+    {
+		cout << "Case #" << case_no++ <<": ";
 		solve();
 	}
+    
+#ifdef DBG
+	// clock_t end = clock();
+	// double elapsed_secs = double(end-begin) / CLOCKS_PER_SEC;
+    // cout<<fixed<<setprecision(3)<<"elapsed: "<<elapsed_secs<<" sec."<<endl;
+	fclose(stdin);
+	fclose(stdout);
+#endif 
 
 	return 0;
 }
