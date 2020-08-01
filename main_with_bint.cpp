@@ -1,13 +1,15 @@
 #include <bits/stdc++.h>
 
+#define LL long long
+
 using namespace std;
 
 class bint
 {
-	static const int DLM = 100; //digital length max
-	static const int B = 100000; //base
+	static const int DLM = 4096; //digital length max
+	static const int B = 100000000; //base
 	static const int LB = (int)log10(B);
-	static const int DIGIT_SIZE = DLM*2/LB; //bint*bint
+	static const int DIGIT_SIZE = DLM / LB + 1 ; //bint*bint
     
 	bool bNeg;
 	bint _abs(const bint& y)
@@ -21,11 +23,13 @@ public:
 	int d[DIGIT_SIZE], l;
 	int operator [](int i) const { return d[i]; }
 	int &operator [](int i) { return d[i]; }
+    
 	bint(): bNeg(false)
 	{
 		memset(d, 0, sizeof(d));
 		l = 1;
 	}
+
 	bint(LL x): bNeg(false)
 	{
 		if(x<0)
@@ -38,23 +42,27 @@ public:
 	
 	bint(int x)
 	{
-		*this = bint((LL)x);
+        LL t = (LL) x;
+        assert(t <= LLONG_MAX);
+		*this = bint(t);
 	}
 	
 	bint(string s): bNeg(false)
 	{
 		int i, j, n;
+        size_t pos;
 
 		//erase leading 0
 		s.erase(0, min(s.find_first_not_of('0'), s.size()-1));
 
-		if((i=s.find_first_of('-'))!=string::npos)
+		if((pos=s.find_first_of('-'))!=string::npos)
 		{
-			s.erase(i, 1);
+			s.erase(pos, 1);
 			bNeg = true;
 		}
-		n = s.length();
+        i = (int)pos;
 		
+		n = s.length();
 		for(l=(n+LB-1)/LB, i=0; i<l; i++)
 			for(d[i]=0, j=0; j<LB; j++)
 				if(n-i*LB-LB+j>=0) d[i]=d[i]*10+s[n-i*LB-LB+j]-'0';
@@ -157,12 +165,7 @@ public:
 	//multiplication for int
 	bint operator*(int y)
 	{
-		bint x(*this);
-		int i;
-		LL h;
-		for(h=0, i=0; i<x.l || h; h+=(i<x.l)*(LL)x[i]*y, x[i]=h%B, h/=B, i++);
-		for(x.l=i; x.l>1 && !x[x.l-1]; x.l--);
-		return x;
+        return (*this) * bint(y);
 	}
 	//multiplication for bint
 	bint operator*(const bint& y)
