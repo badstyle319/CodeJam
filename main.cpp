@@ -13,7 +13,7 @@ int main()
 	cin.tie(0);
 #ifdef DBG
 	freopen("in.txt", "r", stdin);
-	freopen("out.txt", "w", stdout);
+	// freopen("out.txt", "w", stdout);
 	// clock_t begin = clock();
 #endif
     
@@ -22,7 +22,7 @@ int main()
     cin >> T;
 	while(T--)
     {
-		cout << "Case #" << case_no++ <<": ";
+		cout << "Case #" << case_no++ <<":";
 		solve();
 	}
     
@@ -31,7 +31,7 @@ int main()
 	// double elapsed_secs = double(end-begin) / CLOCKS_PER_SEC;
     // cout<<fixed<<setprecision(3)<<"elapsed: "<<elapsed_secs<<" sec."<<endl;
 	fclose(stdin);
-	fclose(stdout);
+	// fclose(stdout);
 #endif 
 
 	return 0;
